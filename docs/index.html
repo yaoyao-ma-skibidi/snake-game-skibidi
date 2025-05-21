@@ -140,6 +140,7 @@
   </div>
   <audio id="eat-sound" src="fart.mp3" preload="auto"></audio>
   <audio id="die-sound" src="beep.mp3" preload="auto"></audio>
+  <audio id="football-sound" src="football.mp3" preload="auto"></audio>
   <script>
     // Game constants
     let gridSize, tileCount, offsetX, offsetY;
@@ -148,6 +149,7 @@
     const scoreEl = document.getElementById('score');
     const eatSound = document.getElementById('eat-sound');
     const dieSound = document.getElementById('die-sound');
+    const footballSound = document.getElementById('football-sound');
     const headImg = new Image();
     headImg.src = 'snake_head.jpg';
 
@@ -231,6 +233,8 @@
       gameOver = true;
       dieSound.currentTime = 0;
       dieSound.play();
+      footballSound.currentTime = 0;
+      footballSound.play();
       console.log('Die sound played');
       setTimeout(() => {
         alert('Game Over! Your score: ' + score);
@@ -313,6 +317,8 @@
       gameStarted = true;
       startOverlay.style.display = 'none';
       unlockAudio();
+      footballSound.currentTime = 0;
+      footballSound.play();
       reset();
       lastMove = 0;
       requestAnimationFrame(gameLoop);
@@ -329,6 +335,7 @@
     function unlockAudio() {
       eatSound.play().then(() => eatSound.pause()).catch(() => {});
       dieSound.play().then(() => dieSound.pause()).catch(() => {});
+      footballSound.play().then(() => footballSound.pause()).catch(() => {});
     }
   </script>
 </body>
