@@ -10,6 +10,9 @@
       margin: 0;
       padding: 0;
       background: #222;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -29,9 +32,12 @@
       background: #111;
       border: 4px solid #fff;
       image-rendering: pixelated;
-      max-width: 98vw;
-      max-height: 70vw;
+      width: 100vw;
+      height: 100vw;
+      max-width: 100vw;
+      max-height: 100vw;
       box-shadow: 0 0 20px #000a;
+      display: block;
     }
     #score {
       font-size: 1.2em;
@@ -92,8 +98,8 @@
   <audio id="die-sound" src="beep.mp3" preload="auto"></audio>
   <script>
     // Game constants
-    const gridSize = 16;
-    const tileCount = 20;
+    const gridSize = 32;
+    const tileCount = Math.floor(window.innerWidth / gridSize);
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
     const scoreEl = document.getElementById('score');
@@ -108,8 +114,11 @@
     let food = {x: 5, y: 5};
     let score = 0;
     let gameOver = false;
-    let moveInterval = 120; // ms, default speed
+    let moveInterval = 200; // ms, slower speed
     let lastMove = 0;
+
+    canvas.width = gridSize * tileCount;
+    canvas.height = gridSize * tileCount;
 
     function randomFood() {
       let pos;
@@ -239,6 +248,13 @@
       reset();
       requestAnimationFrame(gameLoop);
     };
+
+    // Responsive resize
+    window.addEventListener('resize', () => {
+      const newTileCount = Math.floor(window.innerWidth / gridSize);
+      canvas.width = gridSize * newTileCount;
+      canvas.height = gridSize * newTileCount;
+    });
   </script>
 </body>
 </html> 
