@@ -140,7 +140,7 @@
   </div>
   <audio id="eat-sound" src="fart.mp3" preload="auto"></audio>
   <audio id="die-sound" src="beep.mp3" preload="auto"></audio>
-  <audio id="football-sound" src="football.mp3" preload="auto"></audio>
+  <audio id="football-sound" src="football.mp3" preload="auto" loop></audio>
   <script>
     // Game constants
     let gridSize, tileCount, offsetX, offsetY;
@@ -233,11 +233,15 @@
       gameOver = true;
       dieSound.currentTime = 0;
       dieSound.play();
+      footballSound.loop = false;
       footballSound.currentTime = 0;
       footballSound.play();
       console.log('Die sound played');
       setTimeout(() => {
         alert('Game Over! Your score: ' + score);
+        footballSound.loop = true;
+        footballSound.currentTime = 0;
+        footballSound.play().catch(() => {});
         reset();
       }, 300);
     }
@@ -312,13 +316,16 @@
     const startOverlay = document.getElementById('start-overlay');
     const startBtn = document.getElementById('start-btn');
     let gameStarted = false;
+    // Play BGM on start overlay
+    footballSound.loop = true;
+    footballSound.currentTime = 0;
+    footballSound.play().catch(() => {});
     function startGame() {
       if (gameStarted) return;
       gameStarted = true;
       startOverlay.style.display = 'none';
       unlockAudio();
-      footballSound.currentTime = 0;
-      footballSound.play();
+      footballSound.pause();
       reset();
       lastMove = 0;
       requestAnimationFrame(gameLoop);
