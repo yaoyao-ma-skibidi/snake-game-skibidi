@@ -134,7 +134,7 @@
       <div class="btn" id="right">▶</div>
     </div>
     <div id="start-overlay">
-      <div id="start-instruction">Please turn on your sound for some fun sound effects too!</div>
+      <div id="start-instruction">Please turn on your sound to hear some random farts and burps when the snake eats or hit the wall.</div>
       <div id="start-btn">Start Game</div>
     </div>
   </div>
@@ -249,6 +249,7 @@
     }
 
     function gameLoop(ts) {
+      if (!gameStarted) return;
       if (!lastMove) lastMove = ts;
       if (ts - lastMove > moveInterval) {
         update();
@@ -313,6 +314,7 @@
       startOverlay.style.display = 'none';
       unlockAudio();
       reset();
+      lastMove = 0;
       requestAnimationFrame(gameLoop);
     }
     startBtn.addEventListener('click', startGame);
