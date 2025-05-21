@@ -27,17 +27,17 @@
       width: 100vw;
       height: 100vh;
       justify-content: center;
+      position: relative;
     }
     canvas {
       background: #111;
       border: 4px solid #fff;
       image-rendering: pixelated;
-      width: 100vw;
-      height: 100vw;
-      max-width: 100vw;
-      max-height: 100vw;
       box-shadow: 0 0 20px #000a;
       display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
     }
     #score {
       font-size: 1.2em;
@@ -98,8 +98,7 @@
   <audio id="die-sound" src="beep.mp3" preload="auto"></audio>
   <script>
     // Game constants
-    const gridSize = 32;
-    const tileCount = Math.floor(window.innerWidth / gridSize);
+    let gridSize, tileCount, offsetX, offsetY;
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
     const scoreEl = document.getElementById('score');
@@ -117,8 +116,20 @@
     let moveInterval = 200; // ms, slower speed
     let lastMove = 0;
 
-    canvas.width = gridSize * tileCount;
-    canvas.height = gridSize * tileCount;
+    function resizeGame() {
+      const minDim = Math.min(window.innerWidth, window.innerHeight);
+      tileCount = 15; // fixed number of tiles for a good experience
+      gridSize = Math.floor(minDim / tileCount);
+      canvas.width = gridSize * tileCount;
+      canvas.height = gridSize * tileCount;
+      offsetX = Math.floor((window.innerWidth - canvas.width) / 2);
+      offsetY = Math.floor((window.innerHeight - canvas.height) / 2);
+      canvas.style.position = 'absolute';
+      canvas.style.left = offsetX + 'px';
+      canvas.style.top = offsetY + 'px';
+    }
+    resizeGame();
+    window.addEventListener('resize', resizeGame);
 
     function randomFood() {
       let pos;
@@ -249,12 +260,17 @@
       requestAnimationFrame(gameLoop);
     };
 
-    // Responsive resize
-    window.addEventListener('resize', () => {
-      const newTileCount = Math.floor(window.innerWidth / gridSize);
-      canvas.width = gridSize * newTileCount;
-      canvas.height = gridSize * newTileCount;
-    });
+    // Unlock audio on first user interaction
+    function unlockAudio() {
+      eatSound.play().then(() => eatSound.pause()).catch(() => {});
+      dieSound.play().then(() => dieSound.pause()).catch(() => {});
+      document.removeEventListener('keydown', unlockAudio);
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
+    }
+    document.addEventListener('keydown', unlockAudio);
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio);
   </script>
 </body>
 </html> 
