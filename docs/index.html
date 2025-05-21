@@ -117,7 +117,7 @@
     let food = {x: 5, y: 5};
     let score = 0;
     let gameOver = false;
-    let moveInterval = 200; // ms, slower speed
+    let moveInterval = 350; // ms, even slower speed
     let lastMove = 0;
 
     function resizeGame() {
@@ -180,6 +180,7 @@
         scoreEl.textContent = 'Score: ' + score;
         eatSound.currentTime = 0;
         eatSound.play();
+        console.log('Eat sound played');
         food = randomFood();
       } else {
         snake.pop();
@@ -190,6 +191,7 @@
       gameOver = true;
       dieSound.currentTime = 0;
       dieSound.play();
+      console.log('Die sound played');
       setTimeout(() => {
         alert('Game Over! Your score: ' + score);
         reset();
